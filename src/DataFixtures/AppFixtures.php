@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Ad;
 use App\Entity\Booking;
+use App\Entity\Comment;
 use App\Entity\Image;
 use App\Entity\Role;
 use App\Entity\User;
@@ -124,10 +125,21 @@ class AppFixtures extends Fixture
                         ->setEndDate($endDate)
                         ->setCreatedAt($createdAt)
                         ->setAmount($amount)
-                        ->setComment($comment)
-                        ;
+                        ->setComment($comment);
 
                 $manager->persist($booking);
+
+                //Gestion des commentaires
+                if (mt_rand(0,1))
+                {
+                    $comment = new Comment();
+                    $comment->setContent($faker->paragraph())
+                            ->setRating(mt_rand(1,5))
+                            ->setAuthor($booker)
+                            ->setAd($ad);
+
+                    $manager->persist($comment);
+                }
             }
 
             $manager->persist($ad);
