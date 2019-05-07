@@ -2,43 +2,22 @@
 
 namespace App\Controller;
 
+use App\Repository\AdRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController {
 
     /**
-     * @Route("/hello", name="hello_base")
-     * @Route("/hello/{prenom}", name="hello_prenom")
-     * @Route("/hello/{prenom}/age/{age}", name="hello")
-     *
-     * Montre la page qui dit bonjour
-     *
-     */
-    public function hello($prenom = "anonyme", $age = 0){
-        return $this->render(
-            'hello.html.twig',
-            [
-                'prenom' => $prenom,
-                'age' => $age
-            ]
-        );
-    }
-
-    /**
      * @Route("/", name="homepage")
      */
-    public function home(){
-
-        $prenoms = ["Lior" => 31, "Joseph" => 12, "Anne" => 55];
-
+    public function home(AdRepository $adRepo, UserRepository $userRepo){
 
         return $this->render(
-            'home.html.twig',
-            [
-                'title' => "Bonjour à tous !",
-                'age' => 12,
-                'tableau' => $prenoms
+            'home.html.twig', [
+                'ads' => $adRepo->findBestAds(3),
+                'users' => $userRepo->findBestUsers(2)
             ]
         );
     }
